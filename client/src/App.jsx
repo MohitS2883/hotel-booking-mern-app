@@ -32,6 +32,7 @@ function App() {
             <Route path='account/bookings' element={<BookingsPage />}/>
             <Route path='account/places' element={<AccommodationsPage />}/>
             <Route path='account/places/new' element={<PlacesForm />}/>
+            <Route path='account/places/:id' element={<PlacesForm />}/>
           </Route>
         </Routes>
       </UserContextProvider>

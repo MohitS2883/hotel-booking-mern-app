@@ -5,11 +5,20 @@ import axios from 'axios';
 
 function PlacesPage() {
   const [places, setPlaces] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('/places').then(({ data }) => {
-      setPlaces(data);
-    });
+    const fetchPlaces = async () => {
+      try {
+        const { data } = await axios.get('/places');
+        setPlaces(data);
+      } catch (err) {
+        console.error(err); 
+        setError('Failed to fetch places.');
+      }
+    };
+
+    fetchPlaces();
   }, []);
 
   return (
@@ -38,11 +47,13 @@ function PlacesPage() {
         </Link>
       </div>
       <div className="mt-4 px-8">
+        {error && <p className="text-red-500">{error}</p>}
         {places.length > 0 &&
           places.map((place) => (
-            <div
+            <Link
+              to={'/account/places/' + place._id}
               key={place._id}
-              className="bg-gray-200 p-4 rounded-2xl my-4 flex flex-col items-start"
+              className="bg-gray-200 cursor-pointer p-4 rounded-2xl my-4 flex flex-col items-start"
             >
               <div className="w-full h-48 overflow-hidden rounded-lg mb-2">
                 {place.photos.length > 0 && (
@@ -55,7 +66,7 @@ function PlacesPage() {
               </div>
               <h3 className="text-lg font-semibold">{place.title}</h3>
               <p className="text-gray-700 mt-2">{place.description}</p>
-            </div>
+            </Link>
           ))}
       </div>
     </>

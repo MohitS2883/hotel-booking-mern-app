@@ -10,7 +10,7 @@ function AccommodationsPage() {
     return (
         <>
         <PlacesPage /><br/>
-        <LogOutButton />
+        <LogOutButton /><br/>
         </>
     );
 }

@@ -10,7 +10,7 @@ function PlacesPage() {
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
-        const { data } = await axios.get('/places');
+        const { data } = await axios.get('/userplaces');
         setPlaces(data);
       } catch (err) {
         console.error(err); 

@@ -163,7 +163,7 @@ app.post('/places',async (req,res)=>{
             const {username,email,_id} = await User.findById(user.id)
             const {title,address,existingPhotos,
                 description,perks,extraInfo,
-                checkIn,checkOut, guestInfo} = req.body
+                checkIn,checkOut, guestInfo,currency,price} = req.body
             try{
                 const newPlace = new Place({
                 owner:_id,
@@ -175,7 +175,9 @@ app.post('/places',async (req,res)=>{
                 extraInfo: extraInfo,
                 checkIn: checkIn,
                 checkOut: checkOut,
-                maxGuests: guestInfo
+                maxGuests: guestInfo,
+                cost:price,
+                currency:currency
             })
             await newPlace.save()
             res.json({ success: true, place: newPlace });
@@ -189,7 +191,7 @@ app.post('/places',async (req,res)=>{
     }
 })
 
-app.get('/places',(req,res)=>{
+app.get('/userplaces',(req,res)=>{
     const { token } = req.cookies;
     if (token) {
         jwt.verify(token, jwtsecret, {}, async (err, user) => {
@@ -208,7 +210,7 @@ app.put('/places',async (req,res)=>{
     const { token } = req.cookies;
     const {id,title, address, existingPhotos,
         description, perks, extraInfo,
-        checkIn, checkOut, guestInfo} = req.body
+        checkIn, checkOut, guestInfo,currency,price} = req.body
         try {
             jwt.verify(token, jwtsecret, {}, async (err, user) => {
                 if (err) {
@@ -217,6 +219,7 @@ app.put('/places',async (req,res)=>{
     
                 const placeDoc = await Place.findById(id);
                 
+                // Check if the user is the owner of the place
                 if (user.id === placeDoc.owner.toString()) {
                     const updatedPlace = await Place.findOneAndUpdate(
                         { _id: id },
@@ -229,10 +232,12 @@ app.put('/places',async (req,res)=>{
                             extraInfo,
                             checkIn,
                             checkOut,
-                            maxGuests: guestInfo
+                            maxGuests: guestInfo,
+                            cost:price,
+                            currency:currency
                         },
                         { new: true }
-                    );
+                );
                 return res.status(200).json(updatedPlace);
             } else {
                 return res.status(403).json({ error: "Forbidden: Not the owner" });
@@ -256,6 +261,10 @@ app.get('/places/:id', async (req, res) => {
         return res.status(500).json({ message: 'Server error' });
     }
 });
+
+app.get('/places',async (req,res)=>{
+    res.json(await Place.find())
+})
 
 
 

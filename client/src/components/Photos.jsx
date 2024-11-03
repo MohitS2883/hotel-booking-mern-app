@@ -39,18 +39,18 @@ function Photos({existingPhotos,onChange}) {
   return (
     <>
     <div className="flex gap-2">
-              <input
-                type="text" 
-                placeholder="Add using a link ....jpg" 
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-                value={photoLink} onChange={e => setPhotoLink(e.target.value)}
-              />
-              <button 
-                className="bg-gray-200 text-black px-4 rounded-2xl hover:bg-gray-800 hover:text-white transition-colors duration-200"
-                onClick={addPhotoByLink}
-              >
-                Add Photo
-              </button>
+      <input
+        type="text" 
+        placeholder="Add using a link ....jpg" 
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+        value={photoLink} onChange={e => setPhotoLink(e.target.value)}
+      />
+        <button 
+          className="bg-gray-200 text-black px-4 rounded-2xl hover:bg-gray-800 hover:text-white transition-colors duration-200"
+          onClick={addPhotoByLink}
+        >
+          Add Photo
+        </button>
             </div>
             
             <div className='mt-2 grid grid-cols-3 lg:grid-cols-6 md:grid-cols-4'>

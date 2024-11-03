@@ -32,27 +32,41 @@ function PlacePage() {
     console.log(place.extraInfo)
 
     return (
-        <div className='container mx-auto px-4 py-6'>
-            <p className='text-3xl font-bold text-center mb-6'>{place.title}</p>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6'>
+        <div className='container mx-auto px-4 py-6 bg-gray-100 rounded-xl'>
+            <div className='py-2'>
+                <h1 className='text-3xl font-bold mb-4'>{place.title}</h1>
+                <a href={`https://maps.google.com?q=${place.address}`} target='_blank' className='block underline font-semibold'>{place.address}</a>
+            </div>
+            <div className='grid gap-4 grid-cols-[1fr_2fr] mb-6'>
                 {photoArr.length > 0 ? (
-                    photoArr.map((photo, index) => (
-                        <img
-                            key={index}
-                            src={`http://localhost:4000/uploads/${photo}`}
-                            alt={`Photo of ${place.title}`}
-                            className='w-full h-48 object-cover rounded-lg shadow-lg transition-transform transform hover:scale-105'
-                        />
-                    ))
+                    <>
+                        {photoArr[0] && (
+                            <img
+                                key={0}
+                                src={`http://localhost:4000/uploads/${photoArr[0]}`}
+                                alt={`Photo of ${place.title}`}
+                                className='w-full h-48 object-cover rounded-lg shadow-lg transition-transform transform hover:scale-105'
+                            />
+                        )}
+                        {photoArr[1] && (
+                            <img
+                                key={1}
+                                src={`http://localhost:4000/uploads/${photoArr[1]}`}
+                                alt={`Photo of ${place.title}`}
+                                className='w-full h-48 object-cover rounded-lg shadow-lg transition-transform transform hover:scale-105'
+                            />
+                        )}
+                    </>
                 ) : (
                     <p className='text-center text-gray-500'>No photos available.</p>
                 )}
             </div>
+
             <div className='flex flex-wrap gap-1 mb-6'>
                 <div className='flex-1 p-4 rounded-2xl'>
                     <div className='pb-1'>
-                        <strong className='text-xl'>Address:</strong>
-                        <p>{place.address}</p>
+                        <strong className='text-xl'>Address:</strong><br/>
+                        <a href={`https://maps.google.com?q=${place.address}`} target='_blank' className='underline'>{place.address}</a>
                     </div>
                     <div className='pb-1'>
                         <strong className='text-sm'>Checkin:</strong>
@@ -74,6 +88,29 @@ function PlacePage() {
                             ))}
                         </ul>
                     </div> 
+                    <div className='pb-1'>
+                        <strong className='text-sm'>Price:</strong>
+                        <p className='text-sm'>{place.currency}{place.cost}</p>
+                    </div>
+                    {photoArr.length > 2 && (
+                        <div className='inline-flex items-center gap-2 py-2 px-4 duration-200 rounded-full bg-slate-100 hover:bg-slate-200 cursor-pointer'>
+                            <svg 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                fill="none" 
+                                viewBox="0 0 24 24" 
+                                strokeWidth={1.5} 
+                                stroke="currentColor" 
+                                className="w-6 h-6 text-gray-600"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                            </svg>
+
+                            <button className=' text-black px-4 py-2 rounded-2xl'>
+                                Show More Photos
+                            </button>
+                        </div>
+                    )}
+
                 </div>
                 <div className='flex-1 bg-slate-300 p-4 rounded-2xl shadow-md'>
                     <strong className='text-xl'>Description:</strong><br />
@@ -92,6 +129,7 @@ function PlacePage() {
                         ))}
                     </ul>
             </div>
+            
         </div>
     );
 }

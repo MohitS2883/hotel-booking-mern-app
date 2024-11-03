@@ -18,6 +18,8 @@ function PlacesForm() {
     const [guestInfo,setGuestInfo] = useState(1)
     const [existingPhotos,setAddedPhotos] = useState([])
     const [redirect,setRedirect] = useState('')
+    const [price,setPrice] = useState(0)
+    const [currency,setCurrency] = useState('')
 
     useEffect(()=>{
         if(!id){
@@ -34,6 +36,8 @@ function PlacesForm() {
             setCheckOut(data.checkOut)
             setAddedPhotos(data.photos)
             setGuestInfo(data.maxGuests)
+            setPrice(data.cost)
+            setCurrency(data.currency)
         })
     },[id])
 
@@ -59,7 +63,7 @@ function PlacesForm() {
     async function savePlace(e){
         const placeData = {title, address, existingPhotos,
             description, perks, extraInfo,
-            checkIn, checkOut, guestInfo}
+            checkIn, checkOut, guestInfo, currency, price}
         e.preventDefault()
         if(id){ //update
             placeData.id = id
@@ -92,30 +96,40 @@ function PlacesForm() {
                 <textarea value={description} onChange={e=>setDescription(e.target.value)}/>
                 {preInput('Perks','Select all the perks of your place')}
                 <div className='mt-2 grid gap-2 grid-cols-2 md:grid-cols-3 lg:grid-cols-6'>
-                <Perks selected={perks} onChange={setPerks} />
+                    <Perks selected={perks} onChange={setPerks} />
                 </div>
                 {preInput('Extra Info','house rules, etc')}
                 <textarea value={extraInfo} onChange={e=> setExtraInfo(e.target.value)}/>
                 {preInput('Check in & out times, max guests','Check in times, remember to have some time window for cleaning the room between guests')}
-                <div className='grid gap-2 sm:grid-cols-3'>
-                <div>
-                    <h3 className='mt-2 -mb-1'>Check in time</h3>
-                    <input type="text" placeholder='14:00'
-                    value={checkIn} onChange={e=> setCheckIn(e.target.value)} />
-                </div>
-                <div>
-                    <h3 className='mt-2 -mb-1'>Check out time</h3>
-                    <input type="text" placeholder='14:00'
-                    value={checkOut} onChange={e => setCheckOut(e.target.value)}/>
-                </div>
-                <div>
-                    <h3 className='mt-2 -mb-1'>Max. no. of guests</h3>
-                    <input type="number" placeholder='like 4?'
-                    value={guestInfo} onChange={e => setGuestInfo(e.target.value)}/>
-                </div>
+                <div className='grid gap-2 sm:grid-cols-2 md:grid-cols-4'>
+                    <div>
+                        <h3 className='mt-2 -mb-1'>Check in time</h3>
+                        <input type="text" placeholder='14:00'
+                        value={checkIn} onChange={e=> setCheckIn(e.target.value)} />
+                    </div>
+                    <div>
+                        <h3 className='mt-2 -mb-1'>Check out time</h3>
+                        <input type="text" placeholder='14:00'
+                        value={checkOut} onChange={e => setCheckOut(e.target.value)}/>
+                    </div>
+                    <div>
+                        <h3 className='mt-2 -mb-1'>Max. no. of guests</h3>
+                        <input type="number" placeholder='like 4?'
+                        value={guestInfo} onChange={e => setGuestInfo(e.target.value)}/>
+                    </div>
+                    <div>
+                        <h3 className='mt-2 -mb-1'>Currency</h3>
+                        <input type="text" placeholder='$₹'
+                        value={currency} onChange={e => setCurrency(e.target.value)}/>
+                    </div>
+                    <div>
+                        <h3 className='mt-2 -mb-1'>Price per Night</h3>
+                        <input type="number" placeholder='5?'
+                        value={price} onChange={e => setPrice(e.target.value)}/>
+                    </div>
                 </div>
                 <div className='w-full'>
-                <button className="mt-4 w-full bg-gray-200 text-black px-4 py-2 rounded-2xl hover:bg-gray-800 hover:text-white transition-colors duration-200">Save</button>
+                    <button className="mt-4 w-full bg-gray-200 text-black px-4 py-2 rounded-2xl hover:bg-gray-800 hover:text-white transition-colors duration-200">Save</button>
                 </div><br/>
             </form>
 

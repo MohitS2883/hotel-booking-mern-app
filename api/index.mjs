@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use('/uploads',express.static(__dirname+'/uploads'))
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:5174'
+    origin:['http://localhost:5173', 'http://localhost:5174']
 }));
 
 app.get('/test', (req, res) => {
@@ -204,6 +204,59 @@ app.get('/places',(req,res)=>{
         res.json(null);  
     }
 })
+app.put('/places',async (req,res)=>{
+    const { token } = req.cookies;
+    const {id,title, address, existingPhotos,
+        description, perks, extraInfo,
+        checkIn, checkOut, guestInfo} = req.body
+        try {
+            jwt.verify(token, jwtsecret, {}, async (err, user) => {
+                if (err) {
+                    return res.status(401).json({ error: "Unauthorized" });
+                }
+    
+                const placeDoc = await Place.findById(id);
+                
+                if (user.id === placeDoc.owner.toString()) {
+                    const updatedPlace = await Place.findOneAndUpdate(
+                        { _id: id },
+                        {
+                            title,
+                            address,
+                            photos: existingPhotos,
+                            description,
+                            perks,
+                            extraInfo,
+                            checkIn,
+                            checkOut,
+                            maxGuests: guestInfo
+                        },
+                        { new: true }
+                    );
+                return res.status(200).json(updatedPlace);
+            } else {
+                return res.status(403).json({ error: "Forbidden: Not the owner" });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to update the place" });
+    }
+});  
+
+app.get('/places/:id', async (req, res) => {
+    try {
+        const data = await Place.findById(req.params.id);
+        if (!data) {
+            return res.status(404).json({ message: 'Place not found' });
+        }
+        return res.json(data);
+    } catch (error) {
+        console.error('Error fetching place:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
 
 
 app.listen(4000);

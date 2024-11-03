@@ -13,6 +13,7 @@ import BookingsPage from './pages/BookingsPage'
 import AccommodationsPage from './pages/AccommodationsPage'
 import PlacesPage from './pages/PlacesPage'
 import PlacesForm from './components/PlacesForm'
+import PlacePage from './pages/PlacePage'
 
 axios.defaults.baseURL = 'http://localhost:4000'
 axios.defaults.withCredentials = true;

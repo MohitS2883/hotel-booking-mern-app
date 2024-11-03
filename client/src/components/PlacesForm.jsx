@@ -1,22 +1,43 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import Perks from '../components/Perks'
 import Photos from '../components/Photos'
 import axios from 'axios'
-import {Navigate} from 'react-router-dom'
+import {Navigate, useParams} from 'react-router-dom'
 import AccountPageCard from './AccountPageCard'
 
 function PlacesForm() {
+    const {id} = useParams()
     const [title,setTitle] = useState('')
     const [address,setAddress] = useState('')
     const [description,setDescription] = useState('')
-    const [perks,setPerks] = useState('')
+    const [perks,setPerks] = useState([])
     const [extraInfo,setExtraInfo] = useState('')
     const [checkIn,setCheckIn] = useState('')
     const [checkOut,setCheckOut] = useState('')
     const [guestInfo,setGuestInfo] = useState(1)
     const [existingPhotos,setAddedPhotos] = useState([])
     const [redirect,setRedirect] = useState('')
+
+    useEffect(()=>{
+        if(!id){
+            return
+        }
+        axios.get('/places/' + id).then(response =>{
+            const {data} = response
+            setTitle(data.title)
+            setAddress(data.address)
+            setDescription(data.description)
+            setPerks(data.perks)
+            setExtraInfo(data.extraInfo)
+            setCheckIn(data.checkIn)
+            setCheckOut(data.checkOut)
+            setAddedPhotos(data.photos)
+            setGuestInfo(data.maxGuests)
+        })
+    },[id])
+
+
     function inputHeader(text){
         return(
         <h2 className='text-2xl mt-4'>{text}</h2>
@@ -35,13 +56,20 @@ function PlacesForm() {
         </>
         )
     }
-    async function addNewPlace(e){
-        e.preventDefault()
+    async function savePlace(e){
         const placeData = {title, address, existingPhotos,
-        description, perks, extraInfo,
-        checkIn, checkOut, guestInfo}
-        await axios.post('/places',placeData)
-        setRedirect('/account/places')
+            description, perks, extraInfo,
+            checkIn, checkOut, guestInfo}
+        e.preventDefault()
+        if(id){ //update
+            placeData.id = id
+            await axios.put('/places',placeData)
+            setRedirect('/account/places')
+
+        }else{// insert
+            await axios.post('/places',placeData)
+            setRedirect('/account/places')
+        }
     }
     if(redirect){
         return <Navigate to={redirect}/>
@@ -50,7 +78,7 @@ function PlacesForm() {
         <>
         <AccountPageCard />
         <div className='px-5'>
-            <form onSubmit={addNewPlace}>
+            <form onSubmit={savePlace}>
                 {preInput('Title','Title for your place')}
                 <input type="text" placeholder='title, for example: My lovely apt'
                 value={title}

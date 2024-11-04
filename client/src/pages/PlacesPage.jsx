@@ -26,7 +26,7 @@ function PlacesPage() {
       <AccountPageCard />
       <div className="text-center">
         <Link
-          className="inline-flex bg-black text-white rounded-2xl p-2 w-full max-w-sm mt-2 gap-2"
+          className="hover:bg-gray-800 transition hover:scale-105 hover:delay-50 inline-flex bg-black text-white rounded-2xl p-2 w-full max-w-sm mt-2 gap-2"
           to={'/account/places/new'}
         >
           <svg
@@ -53,7 +53,7 @@ function PlacesPage() {
             <Link
               to={'/account/places/' + place._id}
               key={place._id}
-              className="bg-gray-200 cursor-pointer p-4 rounded-2xl my-4 flex flex-col items-start "
+              className="transition hover:scale-105 hover:delay-50 bg-gray-200 cursor-pointer p-4 rounded-2xl my-4 flex flex-col items-start "
             >
               <div className="w-full h-48 overflow-hidden rounded-lg mb-2">
                 {place.photos.length > 0 && (

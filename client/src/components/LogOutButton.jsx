@@ -24,7 +24,7 @@ function LogOutButton() {
   return (
     <div className='text-center max-w-lg mx-auto'>
             Logged in as {user.name} ({user.email})<br/>
-            <button onClick={logout} className='bg-black text-white rounded-2xl p-2 w-full max-w-sm mt-2'>Logout</button>
+            <button onClick={logout} className='bg-black text-white rounded-2xl p-2 w-full max-w-sm mt-2 hover:bg-gray-500 transition hover:scale-105 hover:delay-50'>Logout</button>
         </div>
   )
 }

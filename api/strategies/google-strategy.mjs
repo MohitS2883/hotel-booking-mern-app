@@ -6,8 +6,8 @@ import {User} from "../models/schemas/user.mjs";
 export default passport.use(
     new Strategy(
         {
-            clientID: '1035966692157-34s26raffl4816ftbg5aoa8vo16l48mo.apps.googleusercontent.com',
-            clientSecret: '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',
+            clientID: '',
+            clientSecret: '',
             callbackURL: "http://localhost:5173",
             scope: ["profile", "email"]
         },

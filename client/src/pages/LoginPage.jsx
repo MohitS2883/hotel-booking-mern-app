@@ -7,24 +7,27 @@ export default function LoginPage(){
     const [email,setEmail] = useState('')
     const [pass,setPass] = useState('')
     const [redirect,setRedirect] = useState(false)
-    const {user,setUser} = useContext(UserContext)
-    async function loginUser(e){
-        e.preventDefault()
+    const {setUser} = useContext(UserContext)
+    async function loginUser(e) {
+        e.preventDefault();
         try {
-            const {data} = await axios.post('/login', {
+            const { data } = await axios.post('/login', {
                 email,
                 pass
-            },{withCredentials:true});
-            setUser(data)
-            localStorage.setItem('user', JSON.stringify(data))
+            }, { withCredentials: true });
+
+            setUser(data);
+            localStorage.setItem('user', JSON.stringify(data));
             alert('Login successful');
-            setRedirect(true)
-            setEmail('')
-            setPass('')
+            setRedirect(true);
+            setEmail('');
+            setPass('');
         } catch (error) {
-            alert('Window Failed')
+            console.error("Login error:", error);
+            alert("Login failed. Please check your credentials and try again.");
         }
     }
+
     if(redirect){
         return <Navigate to='/' />
     }

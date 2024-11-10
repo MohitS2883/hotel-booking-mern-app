@@ -85,11 +85,15 @@ app.post('/login', async (req, res) => {
                     if (err) {
                         return res.status(500).send('Error generating token');
                     }
+                    const userResponse = {
+                        email: existUser.email,
+                        username: existUser.username
+                    };
                     res.cookie('token', token, {
                         httpOnly: true,
                         secure: false, 
                         sameSite: 'Strict' 
-                    }).json(existUser);
+                    }).json(userResponse);
                 }
             );
         } else {
@@ -345,6 +349,29 @@ app.get('/bookingidspecific',async (req,res)=>{
         return res.status(500).json({msg:"Sorry some error, Failed to fetch"})
     }
     return res.json(booking)
+})
+
+app.patch('/updateDeets',async (req,res)=>{
+    const {userId,username,email} = req.body;
+    if(!userId){
+        return res.status(400).json({ msg: "User ID is required" })
+    }
+    try{
+        const result = await User.findByIdAndUpdate(
+            userId,
+            {username: username,
+                email: email},
+            {new:true}
+        )
+        if(!result){
+            return res.status(400).json({msg:"Could not update sorry"})
+        }
+        return res.status(200).json({msg:"Updated",user:result})
+    }catch (err){
+        console.error(err);
+        return res.status(500).json({ msg: "Internal Server Error" })
+    }
+
 })
 
 

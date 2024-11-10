@@ -30,3 +30,5 @@ uploads/*.bmp
 uploads/*.tiff
 uploads/*.svg
 uploads/*.webp
+
+payment/*.mjs

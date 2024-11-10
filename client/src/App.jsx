@@ -15,6 +15,8 @@ import PlacePage from './pages/PlacePage'
 import BookingContextProvider from "./context/BookingContextProvider.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import ProtectedComponent from "./components/ProtectedComponent.jsx";
+import BookedPage from "./pages/BookedPage.jsx";
+import ProtectAccountData from "./components/ProtectAccountData.jsx";
 
 axios.defaults.baseURL = 'http://localhost:4000'
 axios.defaults.withCredentials = true;
@@ -32,6 +34,7 @@ function App() {
               <Route path='error' element={<ErrorPage />} />
               <Route path='account' element={<AccountPage />} />
               <Route path='account/bookings' element={<BookingsPage />} />
+              <Route path='account/bookings/:id' element={<BookedPage />} />
               <Route path='account/places' element={<AccommodationsPage />} />
               <Route path='account/places/new' element={<PlacesForm />} />
               <Route path='account/places/:id' element={<PlacesForm />} />

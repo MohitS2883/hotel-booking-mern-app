@@ -8,6 +8,7 @@ function LogOutButton() {
     const [redirect,setRedirect] = useState(null)
     async function logout(){
         await axios.post('/logout')
+        localStorage.removeItem('user')
         setUser(null)
         setRedirect('/')
     }

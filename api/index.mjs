@@ -1,4 +1,4 @@
-import express from 'express';
+import express, {json} from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import { User } from './models/schemas/user.mjs';
@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 import multer from 'multer';
 import fs from 'fs'
 import { Place } from './models/schemas/Place.mjs';
+import {Booking} from "./models/schemas/Bookings.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,6 +33,8 @@ app.use(cors({
     credentials: true,
     origin:['http://localhost:5173', 'http://localhost:5174']
 }));
+app.use(express.urlencoded({ extended: true }));
+
 
 app.get('/test', (req, res) => {
     res.send({ msg: 'done' });
@@ -206,6 +209,9 @@ app.get('/userplaces',(req,res)=>{
         res.json(null);  
     }
 })
+
+
+
 app.put('/places',async (req,res)=>{
     const { token } = req.cookies;
     const {id,title, address, existingPhotos,
@@ -277,8 +283,90 @@ app.get('/search',async (req,res)=>{
     res.json({ message: 'Search received', place, data, guests });
 })
 
+app.post('/bookings', async (req, res) => {
+    try {
+        const { user, place, name, checkIn, checkOut, guests, totalPrice } = req.body;
+        console.log("inside 4000 userid",user)
+        // Create a new booking instance
+        const newBooking = new Booking({
+            user: user,
+            place: place,
+            name,
+            checkIn,
+            checkOut,
+            guests,
+            totalPrice,
+        });
 
-app.get('/')
+        // Save the booking to the database
+        await newBooking.save();
+
+        // Send success response
+        res.status(200).json({ message: 'Booking confirmed' });
+    } catch (error) {
+        console.error('Error in booking:', error);
+        res.status(500).json({ error: 'An error occurred, please try again' });
+    }
+});
+
+app.get('/userbookings', async (req, res) => {
+    const { token } = req.cookies;
+    if (!token) {
+        console.log('No token provided');
+        return res.status(401).json({ error: 'No token provided. Please log in first.' });
+    }
+
+    jwt.verify(token, jwtsecret, {}, async (err, user) => {
+        if (err) {
+            console.error('Token verification failed:', err);
+            return res.status(403).json({ error: 'Token is invalid or expired' });
+        }
+
+
+        try {
+            const { id } = user;
+
+            const bookings = await Booking.find({ user: id });
+
+            if (!bookings || bookings.length === 0) {
+                console.log('No bookings found for this user');
+                return res.status(404).json({ message: 'No bookings found for this user.' });
+            }
+
+            // Send back the bookings
+            res.json(bookings);
+        } catch (error) {
+            console.error('Error fetching bookings:', error);
+            res.status(500).json({ error: 'Failed to fetch bookings' });
+        }
+    });
+});
+
+app.get('/bookingidspecific',async (req,res)=>{
+    const pid = req.query.placeid
+    const booking = await Booking.findById(pid)
+    if(!booking){
+        return res.status(500).json({msg:"Sorry some error, Failed to fetch"})
+    }
+    return res.json(booking)
+})
+
+
+
+// app.post('/api/create-order', createOrder);
+//
+// app.post('/api/verify-payment', verifyPayment);
+
+// app.get('/getUserDetails/:userid',async (req,res) => {
+//     const {userid} = req.params
+//     const existUser = await User.findById({ _id: userid });
+//     if (existUser) {
+//         return res.status(200).json({'name':existUser.username,'email':existUser.email});
+//     } else {
+//         return res.status(404).send('Sorry, your email is not registered');
+//     }
+// })
+
 
 
 app.listen(4000);

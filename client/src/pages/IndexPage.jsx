@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import BookingContext from "../context/bookingContext.jsx";
 
 function IndexPage() {
   const [data, setData] = useState([]);
+  const {setCheckIn,setCheckOut,setGuests} = useContext(BookingContext);
+  setCheckIn('')
+  setCheckOut('')
+  setGuests(1)
 
   useEffect(() => {
     axios.get('/places').then(response => {

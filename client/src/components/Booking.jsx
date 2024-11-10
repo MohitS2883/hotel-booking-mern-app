@@ -23,7 +23,7 @@ export default function Booking({ place }) {
     }
     let days,price
     if(checkIn && checkOut){
-        days = differenceInCalendarDays(new Date(checkOut),new Date(checkIn))
+        days = differenceInCalendarDays(new Date(pagcOut),new Date(pagcIn))
         price = place.cost * (days+1) * guests
     }
     return (

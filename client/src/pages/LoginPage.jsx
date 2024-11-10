@@ -2,14 +2,12 @@ import { useContext, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios"; 
 import UserContext from "../context/userContext";
-import { FaDiscord } from "react-icons/fa";
-
 
 export default function LoginPage(){
     const [email,setEmail] = useState('')
     const [pass,setPass] = useState('')
     const [redirect,setRedirect] = useState(false)
-    const {setUser} = useContext(UserContext)
+    const {user,setUser} = useContext(UserContext)
     async function loginUser(e){
         e.preventDefault()
         try {
@@ -18,6 +16,7 @@ export default function LoginPage(){
                 pass
             },{withCredentials:true});
             setUser(data)
+            localStorage.setItem('user', JSON.stringify(data))
             alert('Login successful');
             setRedirect(true)
             setEmail('')

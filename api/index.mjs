@@ -275,10 +275,6 @@ app.get('/places',async (req,res)=>{
 app.get('/search',async (req,res)=>{
     const { place,data,guests } = req.body
     console.log(place,data,guests)
-    // if (!place || !date || !guests) {
-    //     alert('Please fill in all fields!');
-    //     return;
-    // }
 
     res.json({ message: 'Search received', place, data, guests });
 })

@@ -385,6 +385,24 @@ app.patch('/updateDeets',async (req,res)=>{
 
 })
 
+app.delete('/bookingsdelete',async (req,res)=>{
+    const {bookid} = req.query
+    if(!bookid){
+        return res.status(400).json({msg:"Booking ID required"})
+    }
+    try{
+        const result = await Booking.deleteOne({_id:bookid})
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ msg: "Booking not found" })
+        }
+
+        return res.status(200).json({ msg: "Booking canceled successfully" })
+    }catch (err){
+        console.error(err)
+        return res.status(500).json({msg:"Cancellation Failed"})
+    }
+})
+
 app.get('/auth/discord',passport.authenticate('discord',{ session: false }))
 app.get('/auth/discord/callback',
     passport.authenticate('discord', { session: false, failureRedirect: '/' }),

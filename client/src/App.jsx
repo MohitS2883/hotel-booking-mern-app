@@ -16,7 +16,8 @@ import BookingContextProvider from "./context/BookingContextProvider.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import ProtectedComponent from "./components/ProtectedComponent.jsx";
 import BookedPage from "./pages/BookedPage.jsx";
-import ProtectAccountData from "./components/ProtectAccountData.jsx";
+import DiscordLoginPage from "./pages/DiscordLoginPage.jsx";
+import DiscordCallback from './pages/DiscordLoginSuccessPage.jsx'
 
 axios.defaults.baseURL = 'http://localhost:4000'
 axios.defaults.withCredentials = true;
@@ -38,12 +39,15 @@ function App() {
               <Route path='account/places' element={<AccommodationsPage />} />
               <Route path='account/places/new' element={<PlacesForm />} />
               <Route path='account/places/:id' element={<PlacesForm />} />
-              <Route path='/place/:id' element={<PlacePage />} />
-              <Route path='/place/:id/checkout' element={
+              <Route path='place/:id' element={<PlacePage />} />
+              <Route path='place/:id/checkout' element={
                 <ProtectedComponent>
                   <CheckoutPage />
                 </ProtectedComponent>
               } />
+              <Route path='login/discord' element={<DiscordLoginPage/>}/>
+              <Route path='discord-login-success' element={<DiscordCallback />} />
+
             </Route>
           </Routes>
         </BookingContextProvider>

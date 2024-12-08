@@ -32,3 +32,4 @@ uploads/*.svg
 uploads/*.webp
 
 payment/*.mjs
+.env

@@ -14,6 +14,10 @@ import multer from 'multer';
 import fs from 'fs'
 import { Place } from './models/schemas/Place.mjs';
 import {Booking} from "./models/schemas/Bookings.mjs";
+import passport from "passport";
+import session from 'express-session';
+import "./strategies/discord-strategy.mjs"
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,6 +38,13 @@ app.use(cors({
     origin:['http://localhost:5173', 'http://localhost:5174']
 }));
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+    secret: 'your-session-secret',  // Your session secret
+    resave: false,
+    saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 app.get('/test', (req, res) => {
@@ -91,8 +102,8 @@ app.post('/login', async (req, res) => {
                     };
                     res.cookie('token', token, {
                         httpOnly: true,
-                        secure: false, 
-                        sameSite: 'Strict' 
+                        secure: false,
+                        sameSite: 'Strict'
                     }).json(userResponse);
                 }
             );
@@ -373,6 +384,18 @@ app.patch('/updateDeets',async (req,res)=>{
     }
 
 })
+
+app.get('/auth/discord',passport.authenticate('discord',{ session: false }))
+app.get('/auth/discord/callback',
+    passport.authenticate('discord', { session: false, failureRedirect: '/' }),
+    (req, res) => {
+        const token = req.user;
+        const redirectUrl = `http://localhost:5174/discord-login-success?token=${encodeURIComponent(token)}`;
+        res.redirect(redirectUrl);
+    }
+);
+
+
 
 
 

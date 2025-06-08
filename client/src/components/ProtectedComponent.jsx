@@ -9,7 +9,7 @@ const ProtectedComponent = ({children}) => {
 
     if(!user){
         window.alert('Please Log In first')
-        return <Navigate to={"/account"} />
+        return <Navigate to={"/login"} />
     }
     if(!checkIn){
         window.alert('Check in missing')

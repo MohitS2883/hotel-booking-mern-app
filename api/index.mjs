@@ -408,7 +408,7 @@ app.get('/auth/discord/callback',
     passport.authenticate('discord', { session: false, failureRedirect: '/' }),
     (req, res) => {
         const token = req.user;
-        const redirectUrl = `http://localhost:5174/discord-login-success?token=${encodeURIComponent(token)}`;
+        const redirectUrl = `http://localhost:5173/discord-login-success?token=${encodeURIComponent(token)}`;
         res.redirect(redirectUrl);
     }
 );

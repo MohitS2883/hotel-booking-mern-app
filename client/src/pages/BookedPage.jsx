@@ -45,7 +45,7 @@ export default function BookedPage() {
               <div className="flex items-center justify-center rounded-lg mt-1.5">
                 <Link to="/account/bookings">
                   <button
-                      className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300 ease-in-out">
+                      className="bg-black text-white rounded-2xl py-2 px-4 w-full max-w-sm transition duration-300 ease-in-out hover:bg-gray-700">
                     Go Back to Bookings
                   </button>
                 </Link>
